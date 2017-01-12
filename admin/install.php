@@ -95,6 +95,8 @@ namespace rtCamp\WP\Nginx {
 
 		$rt_wp_nginx_helper_get_options[ 'purge_method' ] = 'get_request';
 
+		$rt_wp_nginx_helper_get_options['redis_purge_feed'] = 0;
+
 		return $rt_wp_nginx_helper_get_options;
 	}
 }

@@ -54,6 +54,8 @@ namespace rtCamp\WP\Nginx {
 				$rt_wp_nginx_helper->options['purge_method'] = ( isset( $_POST['purge_method'] ) ) ? $_POST['purge_method'] : 'get_request';
                 
                 $rt_wp_nginx_helper->options['purge_url'] = ( isset( $_POST['purge_url'] ) && ! empty( $_POST['purge_url'] ) ) ? esc_textarea( $_POST['purge_url'] ) : '';
+
+				$rt_wp_nginx_helper->options['redis_purge_feed'] = ! empty( $_POST['redis_purge_feed'] ) ? 1 : 0;
 			}
 			if ( isset( $_POST['cache_method'] ) && $_POST['cache_method'] = "enable_redis" ) {
 				$rt_wp_nginx_helper->options['redis_hostname'] = ( isset( $_POST['redis_hostname'] ) ) ? $_POST['redis_hostname'] : '127.0.0.1';
@@ -310,6 +312,23 @@ namespace rtCamp\WP\Nginx {
 							</td>
 							</tr>
 						</table>
+                        <table class="form-table rtnginx-table">
+                            <tr valign="top">
+                                <th scope="row">
+                                    <h4><?php esc_html_e( 'Purge Feed:', 'nginx-helper' ); ?></h4>
+                                    <small><?php esc_html_e( '(Only for Redis cache)', 'nginx-helper' ); ?></small>
+                                </th>
+                                <td>
+                                    <?php
+                                    if ( ! isset( $rt_wp_nginx_helper->options['redis_purge_feed'] ) ) {
+                                        $rt_wp_nginx_helper->options['redis_purge_feed'] = 0;
+                                    }
+                                    ?>
+                                    <input type="checkbox" value="1" id="redis_purge_feed" name="redis_purge_feed" <?php checked( $rt_wp_nginx_helper->options['redis_purge_feed'], 1 ); ?> />
+	                                <?php _e( 'when a <strong>post</strong> (or page/custom post) is <strong>modified</strong> or <strong>added</strong>.', 'nginx-helper' ); ?>
+                                </td>
+                            </tr>
+                        </table>
                         <table class="form-table rtnginx-table">
 							<tr valign="top">
 								<th scope="row">
