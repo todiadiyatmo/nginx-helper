@@ -104,8 +104,8 @@ class PhpRedis_Purger extends Purger {
 		}
 
 		$prefix          = $nginx_helper_admin->options['redis_prefix'];
-		$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . $parse['path'];
-		$is_purged       = $this->delete_single_key( $_url_purge_base );
+		$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . $parse['path'].'*';
+		$is_purged       = $this->delete_keys_by_wildcard( $_url_purge_base );
 
 		if ( $is_purged ) {
 			$this->log( '- Purged URL | ' . $url );
