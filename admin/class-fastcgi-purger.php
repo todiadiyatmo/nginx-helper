@@ -24,7 +24,7 @@ class FastCGI_Purger extends Purger {
 	 * @param string $url URL.
 	 * @param bool   $feed Weather it is feed or not.
 	 */
-	public function purge_url( $url, $feed = true ) {
+	public function purge_url( $url, $feed = true, $wildcard = true ) {
 
 		global $nginx_helper_admin;
 

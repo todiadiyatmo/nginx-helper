@@ -93,26 +93,37 @@ class PhpRedis_Purger extends Purger {
 	 * @param string $url URL to purge.
 	 * @param bool   $feed Feed or not.
 	 */
-	public function purge_url( $url, $feed = true ) {
+	public function purge_url( $url, $feed = true, $wildcard = true ) {
+
+		$this->log( '- Purge URL | ' . $url );
 
 		global $nginx_helper_admin;
 
-		$parse = wp_parse_url( $url );
+		$allow_wildcard_purge = $nginx_helper_admin->options['purge_url_by_wildcard'];
+
+		// Disable wildcard purge if options said no or url == homepage url
+		if( !$allow_wildcard_purge || trailingslashit( $url ) == $this->get_homepage_url() ) {
+			$wildcard = false;
+		}
+
+		$parse  	= wp_parse_url( $url );
+		$prefix 	= $nginx_helper_admin->options['redis_prefix'];
 
 		if ( ! isset( $parse['path'] ) ) {
 			$parse['path'] = '';
 		}
 
-		$prefix          = $nginx_helper_admin->options['redis_prefix'];
-		$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . $parse['path'].'*';
-		$is_purged       = $this->delete_keys_by_wildcard( $_url_purge_base );
-
-		if ( $is_purged ) {
-			$this->log( '- Purged URL | ' . $url );
-		} else {
-			$this->log( '- Cache Not Found | ' . $url, 'ERROR' );
+		if( $wildcard ) {
+			$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . untrailingslashit( $parse['path'] ) . '*';
+			$is_purged       = $this->delete_keys_by_wildcard( $_url_purge_base.'*' );
+		}
+		else {
+			$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . $parse['path'];
+			$is_purged       = $this->delete_single_key( $_url_purge_base );			
 		}
 
+		$this->log( '- Purge KEY | ' . $_url_purge_base );
+		$this->log( '- Purged URL | ' . $url );
 		$this->log( '* * * * *' );
 
 	}

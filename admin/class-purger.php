@@ -24,7 +24,7 @@ abstract class Purger {
 	 *
 	 * @return mixed
 	 */
-	abstract public function purge_url( $url, $feed = true );
+	abstract public function purge_url( $url, $feed = true, $wildcard = true );
 
 	/**
 	 * Purge cache for custom url.
@@ -603,19 +603,41 @@ abstract class Purger {
 		// WPML installetd?.
 		if ( function_exists( 'icl_get_home_url' ) ) {
 
-			$homepage_url = trailingslashit( icl_get_home_url() );
+			$homepage_url = $this->get_homepage_url();
 			$this->log( sprintf( __( 'Purging homepage (WPML) ', 'nginx-helper' ) . '%s', $homepage_url ) );
 
 		} else {
 
-			$homepage_url = trailingslashit( home_url() );
+			$homepage_url = $this->get_homepage_url();
 			$this->log( sprintf( __( 'Purging homepage ', 'nginx-helper' ) . '%s', $homepage_url ) );
 
 		}
 
-		$this->purge_url( $homepage_url );
+		$this->purge_url( $homepage_url, true, false );
 
 		return true;
+
+	}	
+
+	/**
+	 * Get homepage url.
+	 *
+	 * @return bool
+	 */
+	protected function get_homepage_url() {
+
+		// WPML installetd?.
+		if ( function_exists( 'icl_get_home_url' ) ) {
+
+			$homepage_url = trailingslashit( icl_get_home_url() );
+
+		} else {
+
+			$homepage_url = trailingslashit( home_url() );
+
+		}
+
+		return $homepage_url;
 
 	}
 
