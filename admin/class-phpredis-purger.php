@@ -114,15 +114,15 @@ class PhpRedis_Purger extends Purger {
 		}
 
 		if( $wildcard ) {
-			$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . untrailingslashit( $parse['path'] ) . '*';
-			$is_purged       = $this->delete_keys_by_wildcard( $_url_purge_base.'*' );
-		}
-		else {
-			$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . $parse['path'];
-			$is_purged       = $this->delete_single_key( $_url_purge_base );			
+			$_url_purge_wildcard_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . trailingslashit( $parse['path'] ) . '?*';
+			$is_purged       = $this->delete_keys_by_wildcard( $_url_purge_wildcard_base );
+			$this->log( '- Purge Wildcard KEY | ' . $_url_purge_wildcard_base );
 		}
 
+		$_url_purge_base = $prefix . $parse['scheme'] . 'GET' . $parse['host'] . $parse['path'];
+		$is_purged       = $this->delete_single_key( $_url_purge_base );			
 		$this->log( '- Purge KEY | ' . $_url_purge_base );
+
 		$this->log( '- Purged URL | ' . $url );
 		$this->log( '* * * * *' );
 
