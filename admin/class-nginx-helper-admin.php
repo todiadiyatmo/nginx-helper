@@ -249,7 +249,7 @@ class Nginx_Helper_Admin {
 			'log_level'                        => 'INFO',
 			'log_filesize'                     => '5',
 			'enable_stamp'                     => 0,
-			'purge_url_by_wildcard'            => 0,
+			'purge_url_query_string'            => 0,
 			'purge_homepage_on_edit'           => 1,
 			'purge_homepage_on_del'            => 1,
 			'purge_archive_on_edit'            => 1,

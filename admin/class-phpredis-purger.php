@@ -99,10 +99,10 @@ class PhpRedis_Purger extends Purger {
 
 		global $nginx_helper_admin;
 
-		$allow_wildcard_purge = $nginx_helper_admin->options['purge_url_by_wildcard'];
+		$allow_wildcard_purge = $nginx_helper_admin->options['purge_url_query_string'];
 
-		// Disable wildcard purge if options said no or url == homepage url
-		if( !$allow_wildcard_purge || trailingslashit( $url ) == $this->get_homepage_url() ) {
+		// Disable wildcard purge if options is false
+		if( !$allow_wildcard_purge ) {
 			$wildcard = false;
 		}
 

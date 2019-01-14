@@ -22,7 +22,7 @@ $args = array(
 	'redis_hostname'                   => FILTER_SANITIZE_STRING,
 	'redis_port'                       => FILTER_SANITIZE_STRING,
 	'redis_prefix'                     => FILTER_SANITIZE_STRING,
-	'purge_url_by_wildcard'            => FILTER_SANITIZE_STRING,
+	'purge_url_query_string'            => FILTER_SANITIZE_STRING,
 	'purge_homepage_on_edit'           => FILTER_SANITIZE_STRING,
 	'purge_homepage_on_del'            => FILTER_SANITIZE_STRING,
 	'purge_url'                        => FILTER_SANITIZE_STRING,
@@ -281,14 +281,14 @@ if ( is_multisite() ) {
 										?>
 									</span>
 								</legend>
-								<label for="purge_url_by_wildcard">
-									<input type="checkbox" value="1" id="purge_url_by_wildcard" name="purge_url_by_wildcard" <?php checked( $nginx_helper_settings['purge_url_by_wildcard'], 1 ); ?> />
+								<label for="purge_url_query_string">
+									<input type="checkbox" value="1" id="purge_url_query_string" name="purge_url_query_string" <?php checked( $nginx_helper_settings['purge_url_query_string'], 1 ); ?> />
 									&nbsp;
 									<?php
 										echo wp_kses(
 											sprintf(
 												'%1$s',
-												 esc_html__( 'purge url by using wildcard (*) ex : http://example.com/post*. useful if query string is cached', 'nginx-helper' )
+												 esc_html__( 'purge url query string (*) ex : http://example.com/post/?*. useful if query string is cached', 'nginx-helper' )
 											),
 											array( 'strong' => array(), )
 										);
